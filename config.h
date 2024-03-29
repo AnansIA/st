@@ -5,8 +5,8 @@
  *
  * font: see http://freedesktop.org/software/fontconfig/fontconfig-user.html
  */
-static char *font = "IosevkaTerm Nerd Font Mono:pixelsize=16:antialias=true:autohint=true";
-static int borderpx = 2;
+static char *font = "IosevkaTerm Nerd Font Mono:pixelsize=20:antialias=true:autohint=true";
+static int borderpx = 15;
 
 /*
  * What program is execed by st depends of these precedence rules:
@@ -93,9 +93,8 @@ char *termname = "st-256color";
  */
 unsigned int tabspaces = 8;
 
-/* Terminal colors (16 first used in escape sequence) */
+/* Terminal colors (16 first used in escape sequence) 
 static const char *colorname[] = {
-	/* 8 normal colors */
 	"black",
 	"red3",
 	"green3",
@@ -105,7 +104,6 @@ static const char *colorname[] = {
 	"cyan3",
 	"gray90",
 
-	/* 8 bright colors */
 	"gray50",
 	"red",
 	"green",
@@ -117,12 +115,44 @@ static const char *colorname[] = {
 
 	[255] = 0,
 
-	/* more colors can be added after 255 to use with DefaultXX */
 	"#cccccc",
 	"#555555",
-	"gray90", /* default foreground colour */
-	"black", /* default background colour */
+	"gray90",
+	"#303446",
 };
+*/
+
+/* Terminal colors (16 first used in escape sequence) */
+static const char *colorname[] = {
+    /* 8 normal colors */
+    "#414559", /* black reemplazado por surface0 */
+    "#E78284", /* red3 reemplazado por red */
+    "#A6D189", /* green3 reemplazado por green */
+    "#E5C890", /* yellow3 reemplazado por yellow */
+    "#0000EE", /* blue2 reemplazado por blue2 (mantenido) */
+    "#CA9EE6", /* magenta3 reemplazado por mauve */
+    "#00CDCD", /* cyan3 reemplazado aproximadamente por teal */
+    "#C0C0C0", /* gray90 reemplazado aproximadamente */
+
+    /* 8 bright colors */
+    "#737994", /* gray50 reemplazado por overlay0 */
+    "#FF0000", /* red reemplazado por red */
+    "#00CD00", /* green reemplazado por green3 aproximadamente */
+    "#CDCD00", /* yellow reemplazado por yellow3 aproximadamente */
+    "#5c5cff", /* (mantenido) */
+    "#FF00FF", /* magenta reemplazado por pink */
+    "#00FFFF", /* cyan reemplazado por cyan */
+    "#FFFFFF", /* white (mantenido) */
+
+    [255] = 0,
+
+    /* more colors can be added after 255 to use with DefaultXX */
+    "#cccccc",
+    "#555555",
+    "#C0C0C0", /* default foreground colour reemplazado por gray90 aproximadamente */
+    "#303446", /* default background colour (mantenido) */
+};
+
 
 
 /*
