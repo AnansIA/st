@@ -132,7 +132,7 @@ static const char *colorname[] = {
     "#0000EE", /* blue2 reemplazado por blue2 (mantenido) */
     "#CA9EE6", /* magenta3 reemplazado por mauve */
     "#00CDCD", /* cyan3 reemplazado aproximadamente por teal */
-    "#C0C0C0", /* gray90 reemplazado aproximadamente */
+    "gray90", /* gray90 reemplazado aproximadamente */
 
     /* 8 bright colors */
     "#737994", /* gray50 reemplazado por overlay0 */
@@ -149,7 +149,7 @@ static const char *colorname[] = {
     /* more colors can be added after 255 to use with DefaultXX */
     "#cccccc",
     "#555555",
-    "#C0C0C0", /* default foreground colour reemplazado por gray90 aproximadamente */
+    "gray90", /* default foreground colour reemplazado por gray90 aproximadamente */
     "#303446", /* default background colour (mantenido) */
 };
 
@@ -308,8 +308,8 @@ static Key key[] = {
 	{ XK_KP_Delete,     ControlMask,    "\033[3;5~",    +1,    0},
 	{ XK_KP_Delete,     ShiftMask,      "\033[2K",      -1,    0},
 	{ XK_KP_Delete,     ShiftMask,      "\033[3;2~",    +1,    0},
-	{ XK_KP_Delete,     XK_ANY_MOD,     "\033[P",       -1,    0},
-	{ XK_KP_Delete,     XK_ANY_MOD,     "\033[3~",      +1,    0},
+	{ XK_KP_Delete,     XK_ANY_MOD,     "\033OC\177",       -1,    0},
+	{ XK_KP_Delete,     XK_ANY_MOD,     "\033OC\177",      +1,    0},
 	{ XK_KP_Multiply,   XK_ANY_MOD,     "\033Oj",       +2,    0},
 	{ XK_KP_Add,        XK_ANY_MOD,     "\033Ok",       +2,    0},
 	{ XK_KP_Enter,      XK_ANY_MOD,     "\033OM",       +2,    0},
@@ -376,8 +376,8 @@ static Key key[] = {
 	{ XK_Delete,        ControlMask,    "\033[3;5~",    +1,    0},
 	{ XK_Delete,        ShiftMask,      "\033[2K",      -1,    0},
 	{ XK_Delete,        ShiftMask,      "\033[3;2~",    +1,    0},
-	{ XK_Delete,        XK_ANY_MOD,     "\033[P",       -1,    0},
-	{ XK_Delete,        XK_ANY_MOD,     "\033[3~",      +1,    0},
+	{ XK_Delete,        XK_ANY_MOD,     "\033OC\177",   +1,    0},
+	{ XK_Delete,        XK_ANY_MOD,     "\033OC\177",   -1,    0},
 	{ XK_BackSpace,     XK_NO_MOD,      "\177",          0,    0},
 	{ XK_BackSpace,     Mod1Mask,       "\033\177",      0,    0},
 	{ XK_Home,          ShiftMask,      "\033[2J",       0,   -1},
