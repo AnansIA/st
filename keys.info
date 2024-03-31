@@ -1,0 +1,117 @@
+La solucion para la Keys es la siguiente en el archivo zshrc hay que colocar esto, con lo que se solucionan las lineas (home, end, insert y delete):
+
+
+
+typeset -g -A key
+
+key[Home]="${terminfo[khome]}"
+key[End]="${terminfo[kend]}"
+key[Insert]="${terminfo[kich1]}"
+key[Delete]="${terminfo[kdch1]}"
+
+
+
+[[ -n "${key[Home]}"      ]] && bindkey -- "${key[Home]}"      beginning-of-line
+[[ -n "${key[End]}"       ]] && bindkey -- "${key[End]}"       end-of-line
+[[ -n "${key[Insert]}"    ]] && bindkey -- "${key[Insert]}"    overwrite-mode
+[[ -n "${key[Delete]}"    ]] && bindkey -- "${key[Delete]}"    delete-char
+
+
+if (( ${+terminfo[smkx]} && ${+terminfo[rmkx]} )); then
+	autoload -Uz add-zle-hook-widget
+	function zle_application_mode_start {
+		echoti smkx
+	}
+	function zle_application_mode_stop {
+		echoti rmkx
+	}
+	add-zle-hook-widget -Uz zle-line-init zle_application_mode_start
+	add-zle-hook-widget -Uz zle-line-finish zle_application_mode_stop
+fi
+
+
+Esto lo saque de:
+
+
+https://bbs.archlinux.org/viewtopic.php?id=248168
+
+El codigo completo que pasaron:
+
+
+[[ -n "${key[PageDown]}"  ]] && bindkey -- "${key[PageDown]}"  end-of-buffer-or-history
+[[ -n "${key[ShiftTab]}"  ]] && bindkey -- "${key[ShiftTab]}"  reverse-menu-complete
+
+# Finally, make sure the terminal is in application mode, when zle is
+# active. Only then are the values from $terminfo valid.
+if (( ${+terminfo[smkx]} && ${+terminfo[rmkx]} )); then
+	autoload -Uz add-zle-hook-widget
+	function zle_application_mode_start {
+		echoti smkx
+	}
+	function zle_application_mode_stop {
+		echoti rmkx
+	}
+	add-zle-hook-widget -Uz zle-line-init zle_application_mode_start
+	add-zle-hook-widget -Uz zle-line-finish zle_application_mode_stop
+fi
+
+
+Se me presentaron algunos problemas con la configuración del teclado y he encontrado algunas soluciones (que quizás no son las ideales pero me han ido sirviendo hasta encontrar la definitiva.)
+
+Ejemplo:
+
+-El primer campo indica la tecla se puede comprobar con xev a que se refiere.
+-El segundo campo se refiere a la mascara por ejemplo XK_ANY_MOD es en sin mascara, es importante colocarlos al final de las mascaras a este modo ya que st va tomando las prioridades y preferible que vea si existen mascaras.
+-El tercer campo es el string en codigo ANSI que se va a representar por pantalla.
+-El cuarto campo es el que deterimina si afecta a la aplicación en este caso por ejemplo, el \033[0G saldra por terminal ya que tiene -1 y el \033[1~ saldra por aplicaciones.
+-El quinto es appcursor value (Valor de appcursor): Se refiere a cómo se debe manejar el modo de aplicación del cursor. Esto puede afectar cómo se interpretan las teclas de cursor (flechas) en diferentes contextos.
+
+    0: Sin valor asignado o no cambia el comportamiento por defecto.
+    > 0: El modo de aplicación del cursor está habilitado.
+    < 0: El modo de aplicación del cursor está deshabilitado.
+
+ejemplo:
+	{ XK_Home,          XK_ANY_MOD,     "\033[0G",       0,   -1},
+	{ XK_Home,          XK_ANY_MOD,     "\033[1~",       0,   +1},
+
+
+
+Movimiento del cursor:
+
+    Cursor arriba: \033[{n}A mueve el cursor n líneas hacia arriba.
+    Cursor abajo: \033[{n}B mueve el cursor n líneas hacia abajo.
+    Cursor adelante (derecha): \033[{n}C mueve el cursor n caracteres hacia la derecha.
+    Cursor atrás (izquierda): \033[{n}D mueve el cursor n caracteres hacia la izquierda.
+    Cursor a la siguiente línea: \033[{n}E mueve el cursor al principio de la n-ésima línea hacia abajo.
+    Cursor a la línea anterior: \033[{n}F mueve el cursor al principio de la n-ésima línea hacia arriba.
+    Establecer posición del cursor: \033[{n};{m}H o \033[{n};{m}f mueve el cursor a la fila n y la columna m.
+    Guardar posición del cursor: \033[s guarda la posición actual del cursor.
+    Restaurar posición del cursor: \033[u restaura el cursor a la última posición guardada.
+
+Limpieza de pantalla:
+
+    Limpiar desde el cursor hasta el final de la pantalla: \033[0J limpia desde la posición del cursor hasta el final de la pantalla.
+    Limpiar desde el cursor hasta el principio de la pantalla: \033[1J limpia desde la posición del cursor hasta el principio de la pantalla.
+    Limpiar pantalla completa: \033[2J limpia la pantalla completa.
+    Limpiar desde el cursor hasta el final de la línea: \033[0K limpia desde la posición del cursor hasta el final de la línea.
+    Limpiar desde el cursor hasta el inicio de la línea: \033[1K limpia desde la posición del cursor hasta el inicio de la línea.
+    Limpiar línea completa: \033[2K limpia la línea entera.
+
+Estilo del texto:
+
+    Reset: \033[0m resetea todos los atributos del texto.
+    Negrita: \033[1m establece el texto en negrita.
+    Subrayado: \033[4m establece el texto subrayado.
+    Parpadeo: \033[5m hace que el texto parpadee.
+    Inverso: \033[7m invierte los colores del texto.
+    Oculto: \033[8m oculta el texto (útil para contraseñas).
+
+Colores del texto:
+
+    Texto en color: \033[{color}m cambia el color del texto. Los colores van del 30 al 37 para los colores estándar, y del 90 al 97 para los colores más brillantes.
+    Fondo en color: \033[{color}m cambia el color de fondo. Los colores van del 40 al 47 para los colores estándar, y del 100 al 107 para los colores más brillantes.
+
+Ejemplo de colores:
+
+    Texto rojo: \033[31m
+    Fondo azul: \033[44m
